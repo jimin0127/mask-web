@@ -4,5 +4,6 @@ from django.urls import path, include
 from MaskGuestBook import views
 
 urlpatterns = [
-    path('', views.index, name="index")
+    path('index', views.index, name="index"),
+    path('GuestBook', views.GuestBook, name="GuestBook"),
 ]
