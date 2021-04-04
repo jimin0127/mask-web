@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
@@ -6,4 +7,12 @@ def index(request):
         request,
         'MaskGuestBook/index.html',
         {}
+    )
+
+def keyboard(request):
+    return JsonResponse(
+        {
+            'type': 'buttons',
+            'buttons': ['Mask란', '개발자 소개']
+        }
     )
