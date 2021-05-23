@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from .forms import GuestBookForm
+from .models import GuestBook
 
 # Create your views here.
-def GuestBook(request):
+def postGuestBook(request):
     if request.method == 'POST':
         form = GuestBookForm(request.POST)
         if form.is_valid():
@@ -18,6 +19,11 @@ def GuestBook(request):
 
     else:
         form = GuestBookForm()
+        # return render(
+        #     request,
+        #     'MaskGuestBook/GuestBook.html',
+        #     {'form': form}
+        # )
         return render(
             request,
             'MaskGuestBook/GuestBook.html',
@@ -25,12 +31,14 @@ def GuestBook(request):
         )
 
 def index(request):
-
-    return render(
-        request,
-        'MaskGuestBook/index.html',
-        {}
-    )
+    guests = {'guests':GuestBook.objects.all()}
+    return render(request, 'MaskGuestBook/list.html', guests)
+    # return render(
+    #     request,
+    #     'MaskGuestBook/index.html',
+    #     {}
+    # )
+    # return HttpResponse(str)
 
 def keyboard(request):
     return JsonResponse(
@@ -39,3 +47,5 @@ def keyboard(request):
             'buttons': ['Mask란', '개발자 소개']
         }
     )
+
+
