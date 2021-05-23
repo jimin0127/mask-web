@@ -15,6 +15,7 @@ def GuestBook(request):
             #     {'form': form}
             # )
             return redirect('index')
+
     else:
         form = GuestBookForm()
         return render(
