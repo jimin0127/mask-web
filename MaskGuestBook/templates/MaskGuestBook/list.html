@@ -1,31 +1,31 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 </head>
 <body>
-{% for guest in guests %}
-<tr class="text-center">
-   <th scope="row">
-       <span>{{ guest.name }}</span>
-   </th>
-<!--   <td>-->
-<!--       <a href="/post/{{ guest.name }}">-->
-<!--           <span>{{ guest.name }}</span>-->
-<!--       </a>-->
-<!--   </td>-->
-   <td>
-       <span>{{ guest.phone }}</span>
-   </td>
-    <td>
-       <span>{{ guest.message }}</span>
-   </td>
-<!--   <td>-->
-<!--       <span>{{ board.created_date | date:"Y-m-d h:i" }}</span>-->
-<!--   </td>-->
-</tr>
+{% for image in guests %}
+    <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+    <div class="flipper">
+        <div class = 'front'>
+           <img src="{% static "resources/images/" %}{{ image.image_name }}.png">
+        </div>
+        <div class = 'back'>
+            <div style="width: 500px; height: 500px; background-color: gray">
+                <h2>{{ image.name }}</h2>
+                <h2>{{ image.phone }}</h2>
+                <h2>{{ image.message }}</h2>
+            </div>
+        </div>
+    </div>
+
 {% endfor %}
+<a href="{% url 'live' %}">사진찍기</a>
 
 </body>
 </html>

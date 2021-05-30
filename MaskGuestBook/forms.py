@@ -1,7 +1,7 @@
 from django import forms
-from .models import GuestBook
+from .models import GuestBookModel
 
 class GuestBookForm(forms.ModelForm):
     class Meta:
-        model = GuestBook
-        fields = ('name','pic', 'phone', 'message')
+        model = GuestBookModel
+        fields = ('name','phone', 'message')
