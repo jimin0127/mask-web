@@ -9,6 +9,7 @@
 
 </head>
 <body>
+<div class="post">
 {% for image in guests %}
     <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
     <div class="flipper">
@@ -23,9 +24,11 @@
             </div>
         </div>
     </div>
-
+    </div>
 {% endfor %}
-<a href="{% url 'live' %}">사진찍기</a>
-
+</div>
+<div class="camera">
+{% include 'MaskGuestBook/live.html' %}
+</div>
 </body>
 </html>

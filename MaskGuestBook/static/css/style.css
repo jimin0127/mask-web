@@ -1,3 +1,24 @@
+
+
+.post{
+  float: left;
+  background-color: #0f9d58;
+  width: 50%;
+  height: 500px;
+}
+
+.camera{
+  float: left;
+  background-color: #3e2723;
+  width: 50%;
+  height: 500px;
+}
+
+
+
+
+
+
 /* entire container, keeps perspective */
 .flip-container {
   perspective: 1000px;
