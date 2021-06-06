@@ -7,14 +7,11 @@ from django.urls import path, include
 from MaskGuestBook import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.live, name="index"),
     url(r'^keyboard', views.keyboard),
-    path('index', views.index, name="index"),
-    path('GuestBook', views.postGuestBook, name="GuestBook"),
     url(r'^go/$', views.goGuestBook, name="goGuestBook"),
-    url(r'^$', views.live, name='live'),
+    #url(r'^$', views.live, name='live'),
 	url(r'^stream2/$', views.stream2, name='stream2'),
-	url(r'^live/$', views.live, name='live'),
-    #url(r'^mask/$', views.mask, name = 'mask'),
+	url(r'^index/$', views.live, name='live'),
     url(r'^capture/$', views.capture, name = 'capture')
 ]

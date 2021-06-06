@@ -26,59 +26,11 @@ import time
 # Create your views here.
 def goGuestBook(request):
     form = GuestBookForm()
-    #if request.method == 'POST':
-    print("goGuestBook")
     return render(
         request,
         'MaskGuestBook/GuestBook.html',
         {'form' : form}
     )
-
-
-def postGuestBook(request):
-    if request.method == 'POST':
-        form = GuestBookForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            # return render(
-            #     request,
-            #     'MaskGuestBook/index.html',
-            #     {'form': form}
-            # )
-            return redirect('index')
-
-    else:
-        form = GuestBookForm()
-        # return render(
-        #     request,
-        #     'MaskGuestBook/GuestBook.html',
-        #     {'form': form}
-        # )
-        return render(
-            request,
-            'MaskGuestBook/GuestBook.html',
-            {'form': form}
-        )
-
-case = 0
-
-def index(request):
-    guests = GuestBookModel.objects.all()
-    images = Image.objects.all()
-
-    return render(request,
-                  'MaskGuestBook/list.html',
-                  {'guests':guests,
-                   'images':images,
-                   'case' : case}
-                  )
-
-    # return render(
-    #     request,
-    #     'MaskGuestBook/index.html',
-    #     {}
-    # )
-    # return HttpResponse(str)
 
 
 def keyboard(request):
@@ -141,8 +93,6 @@ def gen(camera):
 
 
 def stream2(request):
-    detect = camera()
-    detect.start()
     try:
         return StreamingHttpResponse(gen(()), content_type="multipart/x-mixed-replace;boundary=frame")
     except:  # This is bad! replace it with proper handling
@@ -164,23 +114,31 @@ def capture(request):
 
 def live(request):
     print("live")
+    guests = GuestBookModel.objects.all()
+
     if request.method == 'POST':
         name = request.POST['name']
         phone = request.POST['phone']
         message = request.POST['message']
-        cam.take_frame(name, phone, message)
-    return render(request, 'MaskGuestBook/live.html')
+        if(phone.isdigit()):
+            cam.take_frame(name, phone, message)
+        else:
+            return render(request,
+                          'MaskGuestBook/GuestBook.html',
+                          {'error': "숫자만 입력해주세요",
+                           'name' :name,
+                           'message' : message
+                           })
+
+    return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
 
 
-###### maskdemo.py #########3
-
-
-
-
+###### maskdemo.py #########
 class detect_mask(threading.Thread):
     def __init__(self, pro2):
         threading.Thread.__init__(self)
         file_name = os.path.dirname(__file__) + '/model.h5'
+        print('file load')
         self.model = load_model(file_name)
         self.pro2 = pro2
 
@@ -188,6 +146,7 @@ class detect_mask(threading.Thread):
         self.cam = frame
 
     def run(self):
+        print('detect start')
         flag = False
         while flag == False:
             face, confidence = cv.detect_face(self.cam)
@@ -473,10 +432,9 @@ class timer(threading.Thread):
         cv2.imwrite(self.fileName, cam.get_frame_())
 
         cam.flag = False
+        detect = camera()
+        detect.start()
 
-
-# 따로 클래스를 만들고 스레드가 모두 종료되면 rendering 되게 구현하자~
-# v가 되면 사진이 멈추게 하고 버튼을 클릭하게 하자 !
 
 class camera(threading.Thread):
     def __init__(self, target=None):
@@ -515,3 +473,7 @@ class camera(threading.Thread):
 
             self.pro.set_cam(cam.get_frame_())
             self.pro2.set_cam(cam.get_frame_())
+
+
+detect = camera()
+detect.start()

@@ -1,10 +1,32 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 </head>
 <body>
-index.html
+{% for image in guests %}
+    <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+    <div class="flipper">
+        <div class = 'front'>
+           <img src="{% static "resources/images/" %}{{ image.image_name }}.png">
+        </div>
+        <div class = 'back'>
+            <div style="width: 500px; height: 500px; background-color: gray">
+                <h2>{{ image.name }}</h2>
+                <h2>{{ image.phone }}</h2>
+                <h2>{{ image.message }}</h2>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endfor %}
+<div class="camera">
+    {% include 'MaskGuestBook/live.html'%}
+</div>
 </body>
 </html>
