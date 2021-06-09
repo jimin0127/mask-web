@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?after">
+</head>
+<body>
+		<img style="-webkit-user-select: none;" src="{% url 'stream2' %}" width="800" height="480">
+
+        <form action="{% url 'goGuestBook' %}" method='post'>
+				{% csrf_token %}
+				<button type="submit">Snap Shot</button>
+        </form>
+        <form action="{% url 'recapture' %}" method='post'>
+            {% csrf_token %}
+
+            <button type="submit">다시 찍기</button>
+        </form>
+
+</body>
+</html>
