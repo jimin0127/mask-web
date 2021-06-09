@@ -1,5 +1,4 @@
 
-#from .maskdemo import *
 from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -58,6 +57,7 @@ class VideoCamera(object):
 
     def get_frame(self):
         image = self.frame
+
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes()
 
@@ -87,7 +87,6 @@ def gen(camera):
     while True:
         frame = cam.get_frame()
 
-
         yield(b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -110,6 +109,14 @@ def capture(request):
         return StreamingHttpResponse(gen1(()), content_type="multipart/x-mixed-replace;boundary=frame")
     except:  # This is bad! replace it with proper handling
         pass
+
+def recapture(request) :
+    if request.method == 'POST':
+        cam.flag = True
+        threading.Thread(target=cam.update, args=()).start()
+
+        guests = GuestBookModel.objects.all()
+    return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
 
 
 def live(request):
@@ -277,7 +284,10 @@ class detect_v(threading.Thread):
         max_contour = cv2.approxPolyDP(max_contour, 0.02 * cv2.arcLength(max_contour, True), True)
 
         # 블록껍질(경계면을 둘러싸는 다각형을 구하는 알고리즘) : 스크랜스키 -> 볼록한 외관을 찾는다.
-        hull = cv2.convexHull(max_contour)
+        try :
+            hull = cv2.convexHull(max_contour)
+        except :
+            return
 
         for point in hull:
             if cy > point[0][1]: # ?????
@@ -295,7 +305,10 @@ class detect_v(threading.Thread):
         # max_contour의 외곽 경계선을 찾아 손가락 꼭짓점을 찾는다.
         hull = cv2.convexHull(max_contour, returnPoints=False)
         # max_contour 손바닥의 윤곽선과 손가락의 윤곽선을 비교하여 오목하게 들어간 부분을 찾는다.
-        defects = cv2.convexityDefects(max_contour, hull)
+        try :
+            defects = cv2.convexityDefects(max_contour, hull)
+        except:
+            return
 
         if defects is None:
             return -1, None
@@ -393,7 +406,10 @@ class detect_v(threading.Thread):
                 continue
 
             # STEP 6
-            ret, points = self.getFingerPosition(max_contour, self.cam, False)
+            try:
+               ret, points = self.getFingerPosition(max_contour, self.cam, False)
+            except:
+                return
 
             # STEP 7
             if ret > 0 and len(points) > 0:

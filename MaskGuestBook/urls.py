@@ -13,5 +13,6 @@ urlpatterns = [
     #url(r'^$', views.live, name='live'),
 	url(r'^stream2/$', views.stream2, name='stream2'),
 	url(r'^index/$', views.live, name='live'),
-    url(r'^capture/$', views.capture, name = 'capture')
+    url(r'^capture/$', views.capture, name = 'capture'),
+    url(r'^recapture/$', views.recapture, name = 'recapture')
 ]

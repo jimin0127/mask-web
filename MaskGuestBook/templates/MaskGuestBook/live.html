@@ -13,9 +13,12 @@
         <form action="{% url 'goGuestBook' %}" method='post'>
 				{% csrf_token %}
 				<button type="submit">Snap Shot</button>
-			</form>
+        </form>
+        <form action="{% url 'recapture' %}" method='post'>
+            {% csrf_token %}
 
-
+            <button type="submit">다시 찍기</button>
+        </form>
 
 </body>
 </html>

@@ -1,19 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/GuestBook.css' %}">
+
 </head>
 <body>
+<div class="form">
+
 <form action="{% url 'live' %}" method = 'POST' enctype="multipart/form-data">
     {% csrf_token %}
-    이름 : <input type="text" name="name" value="{{ name }}" placeholder="이름을 입력해주세요"> <br>
-    전화번호 : <input type="text" name="phone" placeholder="-를 제외하고 숫자만 입력해주세요">{{ error }} <br>
-    메시지 : <input type="text" name="message" value="{{ message }}" placeholder="방명록을 작성해주세요"><br>
-    <img style="-webkit-user-select: none;" src="{% url 'capture' %}" width="800" height="480">
-
-
+    <div class="image">
+        <img style="-webkit-user-select: none;" src="{% url 'capture' %}" width="800" height="480">
+    </div>
+    <div class="form-text">
+    이름 : <br><input type="text" name="name" value="{{ name }}" placeholder="이름을 입력해주세요"> <br>
+    전화번호 : <br><input type="text" name="phone" placeholder="-를 제외하고 숫자만 입력해주세요">{{ error }} <br>
+    메시지 : <br><input type="text" name="message" value="{{ message }}" placeholder="방명록을 작성해주세요"><br>
+    </div>
     <input type = "submit" value = "전송">
 </form>
+</div>
 </body>
 </html>
