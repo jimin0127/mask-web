@@ -4,24 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static 'css/GuestBook.css' %}">
+    <link rel="stylesheet" href="{% static 'css/GuestBook.css' %}?ver1">
 
 </head>
 <body>
 <div class="form">
-
-<form action="{% url 'live' %}" method = 'POST' enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="image">
-        <img style="-webkit-user-select: none;" src="{% url 'capture' %}" width="800" height="480">
-    </div>
-    <div class="form-text">
-    이름 : <br><input type="text" name="name" value="{{ name }}" placeholder="이름을 입력해주세요"> <br>
-    전화번호 : <br><input type="text" name="phone" placeholder="-를 제외하고 숫자만 입력해주세요">{{ error }} <br>
-    메시지 : <br><input type="text" name="message" value="{{ message }}" placeholder="방명록을 작성해주세요"><br>
-    </div>
-    <input type = "submit" value = "전송">
-</form>
+        <div class="image">
+            <img style="-webkit-user-select: none;border-radius: 50px 0px 0px 50px; overflow: hidden; height: 504px; width: 672px;" src="{% url 'capture' %}" width="800" height="480">
+        </div>
+        <div class="form-text">
+            <form action="{% url 'recapture' %}" method='post'>
+                {% csrf_token %}
+                <button type="submit" class="btn-cancel" ><img src="{% static 'cancel-icon.png' %}"></button>
+            </form>
+            <h1>방명록 작성</h1>
+            <h2>방명록을 작성해주세요!</h2>
+            <h2>홈화면에서 자신의 방명록을 확인할 수 있어요.</h2>
+            <form action="{% url 'live' %}" method = 'POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                <h3>이름</h3><input class="input-text" type="text" name="name" value="{{ name }}" placeholder="이름을 입력하세요" tabindex="1"> <br>
+                <h3>전화번호</h3><h4>{{ error }}</h4> <input class="input-text" type="text" name="phone" placeholder="전화번호를 입력하세요" tabindex="2"><br>
+                <h3>메시지</h3><input style="float: left" class="input-text" type="text" name="message" value="{{ message }}" placeholder="남기실 말을 입력하세요" tabindex="3">
+                <button type="submit" class="btn-submit" tabindex="4"><img style="margin: 4px 3px 0px 0px;" src="{% static 'send-icon.png' %}"></button>
+            </form>
+        </div>
 </div>
 </body>
 </html>

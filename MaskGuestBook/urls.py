@@ -8,6 +8,7 @@ from MaskGuestBook import views
 
 urlpatterns = [
     path('', views.live, name="index"),
+    url(r'^returnlive', views.returnlive, name='returnlive'),
     url(r'^keyboard', views.keyboard),
     url(r'^go/$', views.goGuestBook, name="goGuestBook"),
     #url(r'^$', views.live, name='live'),

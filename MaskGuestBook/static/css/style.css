@@ -1,62 +1,139 @@
-
+body{
+  margin:0;
+}
 
 .post{
   float: left;
-  background-color: #0f9d58;
+  background-color: white;
   width: 50%;
-  height: 500px;
+  height : 100vw;
+
 }
 
 .camera{
   float: left;
-  background-color: #3e2723;
+  background-color: white;
   width: 50%;
-  height: 500px;
+  height : 100vw;
 }
 
-
-
-
-
-
-/* entire container, keeps perspective */
-.flip-container {
-  perspective: 1000px;
-   border:2px solid rgba(0,0,0,0) !important;
+/* 사진 */
+img .img-post{
+  position: absolute;
+  left: 10px;
 }
 
-/* front pane, placed above back */
-.front{
-  z-index:2;
-  /* for firefox 31 */
-  transform: rotateY(0deg);
-  background-size:100% 100%;
-}
-/* back, initially hidden pane */
-.back {
-  transform: rotateY(180deg);
-  background-size:100% 100%;
+/* 사진, 이름, 날짜, 메시지 */
+.guestbook-item{
+  position: relative;
+  color: black;
+  margin: 50px;
 }
 
-/* flip the pane when hovered */
-.flip-container:hover .flipper, .flip-container.hover .flipper {
-  transform: rotateY(180deg);
+/* 이름, 날짜, 메시지 */
+.content-text{
+  position: absolute;
+  left: 350px;
+  top: 3px;
+  width: 500px;
+  height: 250px;
+  background-color: white;
 }
 
-.flip-container, .front, .back {
-  height: 400px;
-  width: 500px
-   /*border:1px solid lightgray;*/
+.name-font{
+  font-size: 20px;
+  color: black;
+  margin:0px;
 }
-/* flip speed goes here */
-.flipper {
-  transition: 0.6s;
-   /* 하위요소에 3D 좌표값 지정 */
-  transform-style: preserve-3d;
+
+/* 방명록 */
+h1{
+  font-size: 40px;
+  color: #4f88fa;
+  padding: 40px 0px 0px 20px;
+}
+
+/* 날짜 */
+.date-font{
+  margin-top: 0px;
+  font-size: 15px;
+  color: #c9c9c9;
+  margin-bottom: 20px;
+}
+
+h3 {
+
+}
+
+/* 메시지 */
+.message-font{
+  font-size: 18px;
+  color: black;
+}
+
+/* 버튼 */
+.buttons{
+  display: table; margin-left: auto; margin-right: auto;
+}
+
+.btn-up, .btn-down{
+  height: 50px;
+  width: 50px;
+  border: none;
+  border-radius: 50%;
+}
+
+.btn-up {
+  background-color: #4f88fa;
+  color: white;
+  position: center;
+  margin-right: 5px;
+}
+
+.btn-down{
+  background-color: white;
+  color: #4f88fa;
+  box-shadow: 6.1px 5.1px 15px 0 rgba(0, 8, 21, 0.07);
+  margin-left: 5px;
+}
+
+/* live.html */
+
+.live-img{
+    display: table;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+}
+
+.live-content {
+  border-radius: 0px 0px 50px 50px ;
+  overflow: hidden;
+  height: 200px;
+  width: 640px;
+  background-color: #4f88fa;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
 }
-/* hide back of pane during swap */
-.front, .back{
+
+.live-content button {
+    background-color: #4f88fa;
+   border: none;
+}
+
+.live-content-text {
   position: absolute;
-  backface-visibility:hidden;
+  left: 10px;
+  color: white;
+}
+
+.capture-btn {
+  position: absolute;
+  right: 70px;
+  top: 65px;
+}
+
+.capture-btn form img {
+  background-color: #4f88fa;
 }

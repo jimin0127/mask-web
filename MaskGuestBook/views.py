@@ -1,6 +1,6 @@
 
 from django.http import JsonResponse, StreamingHttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 from django.utils import timezone
 
 from .forms import GuestBookForm
@@ -116,6 +116,7 @@ def recapture(request) :
         threading.Thread(target=cam.update, args=()).start()
 
         guests = GuestBookModel.objects.all()
+
     return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
 
 
@@ -136,9 +137,16 @@ def live(request):
                            'name' :name,
                            'message' : message
                            })
+    if request.method == 'GET':
+        pos = request.GET['pos']
+        pos = pos + 1
+        print(pos)
+        return render(request, 'MaskGuestBook/index.html', {'guests': guests, 'pos': pos})
 
     return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
 
+def returnlive(request):
+    return render(request, 'MaskGuestBook/live.html')
 
 ###### maskdemo.py #########
 class detect_mask(threading.Thread):
@@ -486,7 +494,6 @@ class camera(threading.Thread):
         while self.break_flag:
             if self.flag == False:
                 cam.frame = self.get_frame(cam.get_frame_())
-
             self.pro.set_cam(cam.get_frame_())
             self.pro2.set_cam(cam.get_frame_())
 
