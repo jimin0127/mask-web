@@ -97,7 +97,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(lr=base_learning_rate),
 model.summary()
 
 # 모델 학습시키기
-model.fit(train_img, train_label, epochs=10, batch_size=16, validation_data=(test_img, test_label))
+model.fit(train_img, train_label, epochs=10, batch_size=12, validation_data=(test_img, test_label))
 
 # 모델 저장하기
 model.save("model.h5")
