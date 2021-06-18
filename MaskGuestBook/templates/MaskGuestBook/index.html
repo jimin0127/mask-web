@@ -5,21 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?ver5">
-
-    <script>
-        var num = 49
-        function btn_up() {
-            const div = document.getElementsByClassName(".guestbook-item")
-            div.item()
-        }
-
-
-    </script>
-
-
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?ver7">
 </head>
-
 
 <body>
 <div class="camera">
@@ -28,25 +15,37 @@
 <div class="post">
 <h1>방명록</h1>
 <hr width="80%" align="left">
-{% for image in guests %}
-     {% if image.id == 49 or image.id ==  50 %}
     <div class="guestbook-item">
-        <img style="width: 320px; height: 240px; border-radius: 10%; overflow: hidden;" src="{% static "resources/images/" %}{{ image.image_name }}.png">
+        <img style="width: 320px; height: 240px; border-radius: 10%; overflow: hidden;" src="{% static "resources/images/" %}{{ guest1.image_name }}.png">
         <div class="content-text">
-            <h2 class="name-font">{{ image.name }}</h2>
-            <h2 class="date-font">{{ image.pub_date | date:"Y년m월d일 f" }}</h2>
-            <h2 class="message-font">{{ image.message }}</h2>
+            <h2 class="name-font">{{ guest1.name }}</h2>
+            <h2 class="date-font">{{ guest1.pub_date | date:"Y년m월d일 f" }}</h2>
+            <h2 class="message-font">{{ guest1.message }}</h2>
+        </div>
+    </div>
+
+    {% if guest2 != None %}
+    <div class="guestbook-item">
+        <img style="width: 320px; height: 240px; border-radius: 10%; overflow: hidden;" src="{% static "resources/images/" %}{{ guest2.image_name }}.png">
+        <div class="content-text">
+            <h2 class="name-font">{{ guest2.name }}</h2>
+            <h2 class="date-font">{{ guest2.pub_date | date:"Y년m월d일 f" }}</h2>
+            <h2 class="message-font">{{ guest2.message }}</h2>
         </div>
     </div>
     {% endif %}
-{% endfor %}
+<!-- recapture 구현-->
     <div class="buttons">
-        <form action="{% url 'live' %}?pos=1" method="get">
-            <button class="btn-up" type="submit"><img src="{% static "button-prev.png" %}"> </button>
-        </form>
-        <form action="{% url 'live' %}?pos=1" method="get">
-            <button class="btn-down" type="submit"><img src="{% static "button-next.png" %}"> </button>
-        </form>
+        {% if btn_up_visiable %}
+            <button class="btn-down" onclick=location.href="{% url 'prevpage' %}?pos=1"><img src="{% static "button-prev.png" %}"></button>
+        {% else %}
+            <button disabled style="opacity: 0.5; cursor:default; border: 0px" ></button>
+        {% endif %}
+        {% if  btn_down_visiable%}
+            <button class="btn-up" onclick=location.href="{% url 'nextpage' %}?pos=1"><img src="{% static "button-next.png" %}"></button>
+        {% else %}
+            <button disabled style="opacity: 0.5; cursor:default; border: 0px" ></button>
+        {% endif %}
     </div>
 </div>
 </body>

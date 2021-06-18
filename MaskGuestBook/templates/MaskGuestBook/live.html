@@ -5,14 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?ver5">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?ver7">
 </head>
 <body>
 		<img class="live-img" style="-webkit-user-select: none; border-radius: 50px 50px 0px 0px; overflow: hidden; height: 480px; width: 640px;" src="{% url 'stream2' %}" width="800" height="480">
         <div class="live-content">
             <div class="live-content-text">
-                <h3>마스크를 착용하셨나요?</h3>
-                <h3>사진과 함께 방명록에 기록을 남겨주세요!</h3>
+                <h4>마스크를 착용하셨나요?</h4>
+                <h3>사진과 함께 방명록에 기록을 남겨보세요!</h3>
             </div>
             <div class="capture-btn">
                 <form action="{% url 'goGuestBook' %}" method='post'>

@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from .forms import GuestBookForm
 from .models import GuestBook, Image, GuestBookModel
-
+import winsound
 
 
 
@@ -114,20 +114,37 @@ def recapture(request) :
     if request.method == 'POST':
         cam.flag = True
         threading.Thread(target=cam.update, args=()).start()
+        pos = position.get_position()
 
-        guests = GuestBookModel.objects.all()
+        a = GuestBookModel.objects.get(id=position.get_position())
+        try:
+            b = GuestBookModel.objects.get(id = pos+1)
+        except:
+            b = None
+        btn_up_visiable = position.next_page()
+        btn_down_visiable = position.prev_page()
+        detect = camera()
+        detect.start()
 
-    return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
+    return render(request,
+                  'MaskGuestBook/index.html', {
+                    'guest1' : a,
+                    'guest2' : b,
+                    'btn_up_visiable': btn_up_visiable,
+                    'btn_down_visiable': btn_down_visiable})
 
 
 def live(request):
+    detect = camera()
+    detect.start()
     print("live")
-    guests = GuestBookModel.objects.all()
-
+    a = GuestBookModel.objects.get(id=position.get_position())
+    b = GuestBookModel.objects.get(id=position.get_position() + 1)
     if request.method == 'POST':
         name = request.POST['name']
         phone = request.POST['phone']
         message = request.POST['message']
+
         if(phone.isdigit()):
             cam.take_frame(name, phone, message)
         else:
@@ -137,13 +154,93 @@ def live(request):
                            'name' :name,
                            'message' : message
                            })
-    if request.method == 'GET':
-        pos = request.GET['pos']
-        pos = pos + 1
-        print(pos)
-        return render(request, 'MaskGuestBook/index.html', {'guests': guests, 'pos': pos})
 
-    return render(request, 'MaskGuestBook/index.html', {'guests' : guests})
+    return render(request,
+                  'MaskGuestBook/index.html',
+                  {'guest1' : a,
+                   'guest2' : b,
+                   'btn_up_visiable': False,
+                    'btn_down_visiable': True})
+
+class position:
+    def __init__(self):
+        self.first_data = GuestBookModel.objects.first()
+        self.position = self.first_data.id
+        print('fist_data', self.first_data.id)
+
+    def up(self):
+        self.position += 2
+
+    def down(self):
+        self.position -= 2
+
+    def get_position(self):
+        return self.position
+
+    def next_page(self):
+        if self.first_data.id >= self.position:
+            return False
+        else:
+            return True
+
+    def prev_page(self):
+        last_data = GuestBookModel.objects.last()
+        print(last_data.id)
+        if last_data.id - self.position <= 1:
+            return False
+        else:
+            return True
+
+
+
+position = position()
+
+def next_page(request) :
+    print('next_page')
+    flag = True
+    if request.method == 'GET':
+        position.up()
+        pos = position.get_position()
+        a = GuestBookModel.objects.get(id = pos)
+        try:
+            b = GuestBookModel.objects.get(id = pos+1)
+        except:
+            b = None
+        btn_up_visiable = position.next_page()
+        btn_down_visiable = position.prev_page()
+
+        print('next' + str(pos))
+        return render(request,
+                      'MaskGuestBook/index.html',
+                      {'guest1': a,
+                       'guest2': b,
+                       'btn_up_visiable': btn_up_visiable,
+                       'btn_down_visiable': btn_down_visiable})
+
+def prev_page(request) :
+    global position
+    print('prev_page')
+    flag = True
+    if request.method == 'GET':
+        position.down()
+        pos = position.get_position()
+
+        a = GuestBookModel.objects.get(id = pos)
+        try:
+            b = GuestBookModel.objects.get(id = pos+1)
+        except:
+            b = None
+        btn_up_visiable = position.next_page()
+        btn_down_visiable = position.prev_page()
+
+        print(pos)
+        return render(request,
+                      'MaskGuestBook/index.html',
+                      {'guest1': a,
+                       'guest2': b,
+                       'btn_up_visiable': btn_up_visiable,
+                       'btn_down_visiable': btn_down_visiable})
+
 
 def returnlive(request):
     return render(request, 'MaskGuestBook/live.html')
@@ -162,6 +259,7 @@ class detect_mask(threading.Thread):
 
     def run(self):
         print('detect start')
+        winsound.PlaySound("띠링.mp3", winsound.SND_ASYNC)
         flag = False
         while flag == False:
             face, confidence = cv.detect_face(self.cam)
@@ -189,6 +287,7 @@ class detect_mask(threading.Thread):
                     # 마스크 착용으로 판별된다면(1)
                     else:
                         flag = True
+                        winsound.PlaySound("띠링.mp3", winsound.SND_ASYNC)
                         print("Mask ({:.2f}%)".format(prediction[0][0] * 100))
 
         self.pro2.start()
@@ -448,6 +547,7 @@ class timer(threading.Thread):
             self.camera.set_frame(countFilePath+ str(i) + '.png')
             time.sleep(1)
             if i == 3:
+                winsound.PlaySound("찰칵소리.mp3", winsound.SND_ASYNC)
                 self.camera.flag = True
         time.sleep(0.5)
         self.camera.break_flag = False
@@ -456,8 +556,7 @@ class timer(threading.Thread):
         cv2.imwrite(self.fileName, cam.get_frame_())
 
         cam.flag = False
-        detect = camera()
-        detect.start()
+
 
 
 class camera(threading.Thread):
@@ -497,6 +596,3 @@ class camera(threading.Thread):
             self.pro.set_cam(cam.get_frame_())
             self.pro2.set_cam(cam.get_frame_())
 
-
-detect = camera()
-detect.start()

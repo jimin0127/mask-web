@@ -61,8 +61,18 @@ h1{
   margin-bottom: 20px;
 }
 
+/*사진과 함께 방명록을 작성해보세요*/
 h3 {
+  font-size: 30px;
+  color: white;
+  margin-top: 0px;
+}
 
+/* 마스크를 착용하셨나요? */
+h4 {
+  margin-bottom: 5px;
+  font-size: 15px;
+  color: white;
 }
 
 /* 메시지 */
@@ -84,15 +94,15 @@ h3 {
 }
 
 .btn-up {
-  background-color: #4f88fa;
-  color: white;
+  background-color:white;
+  color: #4f88fa;
   position: center;
   margin-right: 5px;
 }
 
 .btn-down{
-  background-color: white;
-  color: #4f88fa;
+  background-color: #4f88fa;
+  color: white;
   box-shadow: 6.1px 5.1px 15px 0 rgba(0, 8, 21, 0.07);
   margin-left: 5px;
 }
@@ -123,8 +133,11 @@ h3 {
 }
 
 .live-content-text {
+  width: 320px;
   position: absolute;
   left: 10px;
+  padding-left: 33px;
+  padding-top: 15px;
   color: white;
 }
 
