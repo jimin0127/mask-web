@@ -4,9 +4,8 @@ from django.shortcuts import render, redirect, get_list_or_404
 from django.utils import timezone
 
 from .forms import GuestBookForm
-from .models import GuestBook, Image, GuestBookModel
-import winsound
-
+from .models import GuestBookModel
+from .playSound import playsound
 
 
 import os
@@ -20,6 +19,9 @@ import threading
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 import time
+
+
+playsound = playsound()
 
 
 # Create your views here.
@@ -245,6 +247,7 @@ def prev_page(request) :
 def returnlive(request):
     return render(request, 'MaskGuestBook/live.html')
 
+
 ###### maskdemo.py #########
 class detect_mask(threading.Thread):
     def __init__(self, pro2):
@@ -259,7 +262,7 @@ class detect_mask(threading.Thread):
 
     def run(self):
         print('detect start')
-        winsound.PlaySound("띠링.mp3", winsound.SND_ASYNC)
+        playsound.play_detect_mask()
         flag = False
         while flag == False:
             face, confidence = cv.detect_face(self.cam)
@@ -287,7 +290,7 @@ class detect_mask(threading.Thread):
                     # 마스크 착용으로 판별된다면(1)
                     else:
                         flag = True
-                        winsound.PlaySound("띠링.mp3", winsound.SND_ASYNC)
+                        playsound.play_pose()
                         print("Mask ({:.2f}%)".format(prediction[0][0] * 100))
 
         self.pro2.start()
@@ -543,12 +546,13 @@ class timer(threading.Thread):
         self.cam = frame
 
     def run(self):
+        playsound.play_countdown()
         for i in range(1, 3+1):
             self.camera.set_frame(countFilePath+ str(i) + '.png')
             time.sleep(1)
             if i == 3:
-                winsound.PlaySound("찰칵소리.mp3", winsound.SND_ASYNC)
                 self.camera.flag = True
+                playsound.play_camera()
         time.sleep(0.5)
         self.camera.break_flag = False
         now = datetime.now()
